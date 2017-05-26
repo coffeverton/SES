@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Subscription</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ subscription.id }}</td>
+            </tr>
+            <tr>
+                <th>Topic</th>
+                <td>{{ subscription.topic }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{% if subscription.status %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('subscription_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('subscription_edit', { 'id': subscription.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

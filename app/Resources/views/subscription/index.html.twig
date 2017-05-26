@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Subscriptions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Topic</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for subscription in subscriptions %}
+            <tr>
+                <td><a href="{{ path('subscription_show', { 'id': subscription.id }) }}">{{ subscription.id }}</a></td>
+                <td>{{ subscription.topic }}</td>
+                <td>{% if subscription.status %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('subscription_show', { 'id': subscription.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('subscription_edit', { 'id': subscription.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('subscription_new') }}">Create a new subscription</a>
+        </li>
+    </ul>
+{% endblock %}
