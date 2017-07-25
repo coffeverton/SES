@@ -17,6 +17,14 @@
                 <th>Status</th>
                 <td>{% if subscription.status %}Yes{% else %}No{% endif %}</td>
             </tr>
+            <tr>
+                <th>POST URL</th>
+                <td>
+                	<a href="{{ path('request_url', {'id':subscription.id}) }}">
+                		{{ app.request.getSchemeAndHttpHost ~ path('request_url', {'id':subscription.id}) }}
+                	</a>
+                </td>
+            </tr>
         </tbody>
     </table>
 

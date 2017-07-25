@@ -10,4 +10,5 @@ namespace SesBundle\Repository;
  */
 class SubscriptionRepository extends \Doctrine\ORM\EntityRepository
 {
+	
 }

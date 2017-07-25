@@ -3,6 +3,7 @@
 namespace SesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Subscription
@@ -95,13 +96,17 @@ class Subscription
     }
     
     /**
-     * @ORM\OneToMany(targetEntity="Recipient", mappedBy="subscriptionId")
+     * @ORM\OneToMany(targetEntity="Recipient", mappedBy="subscriptionId", cascade={"persist", "remove"})
      */
     private $recipients;
 
     public function __construct()
     {
         $this->recipients = new ArrayCollection();
+    }
+    
+    public function __toString() {
+    	return $this->getTopic();
     }
 }
 

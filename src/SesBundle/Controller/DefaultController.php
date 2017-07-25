@@ -12,7 +12,7 @@ class DefaultController extends Controller
 {
     /**
      * recebe uma requisicao e salva na pasta temporaria, para processar depois
-     * @Route("/request/{id}")
+     * @Route("/request/{id}", name="request_url")
      */
     public function indexAction(Subscription $s)
     {
@@ -42,6 +42,9 @@ class DefaultController extends Controller
         $tmp_dir = $this->get('kernel')->getRootDir().'/../var/notifications/tmp/';
         $Directory = new \RecursiveDirectoryIterator($tmp_dir);
         $p = 0;
+        $n = 0;
+        $c = 0;
+        $e = 0;
         
         $Iterator = new \RecursiveIteratorIterator($Directory);
         foreach($Iterator as $item)
@@ -54,20 +57,27 @@ class DefaultController extends Controller
                     {
                         case 'Notification':
                             $this->parseNotification($data);
+                            $n++;
                             break;
                         case 'SubscriptionConfirmation':
                             $this->confirmSubscription($data);
+                            $c++;
                             break;
                         
                         default:
                             var_dump($data->Type);
+                            $e++;
+                            die;
                     }
                     $p++;
                     $this->discard($item);
                 }
             }
         }
-        return $this->render('SesBundle:Default:process.html.twig', array('p' => $p));
+        return $this->render(
+                'SesBundle:Default:process.html.twig'
+                , array('p' => $p, 'n' => $c, 'c' => $c, 'e' => $e)
+            );
     }
     
     private function confirmSubscription($data)
@@ -101,9 +111,9 @@ class DefaultController extends Controller
         
         if(is_array($itens))
         {
+            $arr_subscriptions = array();
             foreach($itens as $item)
             {
-
                 $recipient = new Recipient;
                 $recipient->setEmail($item['email']);
                 $recipient->setDate($item['date']);
@@ -112,9 +122,14 @@ class DefaultController extends Controller
                 {
                     $recipient->setInfo($item['info']);
                 }
+                
+                if(!array_key_exists($data->local_id, $arr_subscriptions))
+                {
+                    $arr_subscriptions[$data->local_id] = $em->getRepository('SesBundle:Subscription')->find($data->local_id); 
+                }
 
     //            $recipient->setSubscriptionId($data->local_id);
-                $recipient->setSubscriptionId(2);
+                $recipient->setSubscriptionId($arr_subscriptions[$data->local_id]);
 
                 $em->persist($recipient);
                 $em->flush($recipient);
@@ -125,13 +140,14 @@ class DefaultController extends Controller
     
     private function getBounceInfo($message)
     {
-//        print_r($message);die;
+        print_r($message);die;
         if($message->bounce->bounceType !='Permanent')
         {
             return false;
         }
         $timestamp = new \DateTime($message->bounce->timestamp);
         $c = 0;
+        $obj = array();
         foreach($message->bounce->bouncedRecipients as $item)
         {
             $obj[$c]['email'] = $item->emailAddress;
@@ -149,6 +165,7 @@ class DefaultController extends Controller
         $timestamp = new \DateTime($message->delivery->timestamp);
         $status    = substr($message->delivery->smtpResponse, 0, 3);
         $c = 0;
+        $obj = array();
         foreach($message->delivery->recipients as $item)
         {
             $obj[$c]['email'] = $item;
@@ -164,6 +181,7 @@ class DefaultController extends Controller
     {
         $timestamp = new \DateTime($message->complaint->timestamp);
         $c = 0;
+        $obj = array();
         foreach($message->complaint->complainedRecipients as $item)
         {
             $obj[$c]['email'] = $item->emailAddress;

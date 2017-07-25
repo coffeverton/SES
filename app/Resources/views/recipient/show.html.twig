@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Recipient</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ recipient.id }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ recipient.email }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ recipient.date | date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ recipient.status }}</td>
+            </tr>
+            <tr>
+                <th>Subscription</th>
+                <td>{{ recipient.subscription }}</td>
+            </tr>
+            <tr>
+                <th>Info</th>
+                <td><pre>{{ recipient.info }}</pre></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('recipient_index') }}">Back to the list</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

@@ -52,10 +52,8 @@ class Recipient
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="subscriptionId", type="integer")
      * @ORM\ManyToOne(targetEntity="Subscription", inversedBy="recipients")
-     * @ORM\JoinColumn(name="subscriptionId", referencedColumnName="id")    
+     * @ORM\JoinColumn(name="subscriptionId", referencedColumnName="id")
      */
     private $subscriptionId;
     
@@ -162,7 +160,11 @@ class Recipient
      */
     public function getInfo()
     {
-        return $this->info;
+    	if ($this->info != ''){
+    		return stream_get_contents($this->info);
+    	}
+    	
+    	return $this->info;
     }
     
     /**
@@ -188,6 +190,16 @@ class Recipient
     public function getSubscriptionId()
     {
         return $this->subscriptionId;
+    }
+    
+    /**
+     * Get subscription
+     *
+     * @return \SesBundle\Entity\Subscription
+     */
+    public function getSubscription()
+    {
+    	return $this->subscriptionId;
     }
 }
 

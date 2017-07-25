@@ -9,6 +9,7 @@
                 <th>Id</th>
                 <th>Topic</th>
                 <th>Status</th>
+                <th>POST URL</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -19,6 +20,11 @@
                 <td>{{ subscription.topic }}</td>
                 <td>{% if subscription.status %}Yes{% else %}No{% endif %}</td>
                 <td>
+                	<a href="{{ path('request_url', {'id':subscription.id}) }}">
+                		{{ app.request.getSchemeAndHttpHost ~ path('request_url', {'id':subscription.id}) }}
+                	</a>
+                </td>
+                <td>
                     <ul>
                         <li>
                             <a href="{{ path('subscription_show', { 'id': subscription.id }) }}">show</a>
@@ -28,6 +34,7 @@
                         </li>
                     </ul>
                 </td>
+                
             </tr>
         {% endfor %}
         </tbody>

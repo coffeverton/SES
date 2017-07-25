@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Recipients list</h1>
+	<form method="get" action="{{ path('recipient_index_search') }}">
+		<input type="text" name="search" value="{{ search }}" />
+		<button>Search</button>
+	</form>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Subscription</th>
+                <th>Info</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for recipient in recipients %}
+            <tr>
+                <td><a href="{{ path('recipient_show', { 'id': recipient.id }) }}">{{ recipient.id }}</a></td>
+                <td>{{ recipient.email }}</td>
+                <td>{{ recipient.date | date('Y-m-d H:i:s') }}</td>
+                <td>{{ recipient.status }}</td>
+                <td>{{ recipient.subscription }}</td>
+                <td><pre>{{ recipient.info  }}</pre></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('recipient_show', { 'id': recipient.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('recipient_delete', { 'id': recipient.id }) }}">delete</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if maxpages > 1 %}
+    <nav id="pagination">
+        <ul class="pagination pagination-sm">
+            <li {{ thispage == 1 ? 'class="disabled"' }}>
+                <a href="{{ path('recipient_index_pagination', {page: thispage-1 < 1 ? 1 : thispage-1}) }}">«</a>
+            </li>
+
+            {% for i in 1..maxpages %}
+            <li {{ thispage == i ? 'class="active"' }}>
+            <a href="{{ path('recipient_index_pagination', {page: i}) }}">{{ i }}</a>
+            </li>
+            {% endfor %}
+
+            <li {{ thispage == maxpages ? 'class="disabled"' }}>
+                <a href="{{ path('recipient_index_pagination', {page: thispage+1 <= maxpages ? thispage+1 : thispage}) }}">»</a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}
+{% endblock %}
