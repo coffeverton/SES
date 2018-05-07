@@ -17,3 +17,4 @@
 !/var/notifications
 /var/notifications/*
 !var/notifications/.gitkeep
+.idea/

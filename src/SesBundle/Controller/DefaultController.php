@@ -140,7 +140,7 @@ class DefaultController extends Controller
     
     private function getBounceInfo($message)
     {
-        print_r($message);die;
+        //print_r($message);die;
         if($message->bounce->bounceType !='Permanent')
         {
             return false;
