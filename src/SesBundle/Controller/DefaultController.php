@@ -87,6 +87,7 @@ class DefaultController extends Controller
         $subscription->setStatus(1);
         $em->persist($subscription);
         $em->flush($subscription);
+        file_get_contents($data->SubscribeURL);//para confirmar a inscricao
     }
     
     private function parseNotification($data)

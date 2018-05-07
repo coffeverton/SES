@@ -18,3 +18,4 @@
 /var/notifications/*
 !var/notifications/.gitkeep
 .idea/
+/nbproject
