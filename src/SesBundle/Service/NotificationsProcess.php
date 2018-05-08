@@ -43,7 +43,7 @@ class NotificationsProcess {
                             break;
                         
                         default:
-                            echo "tipo desconhecido:\r\n";
+                            echo "tipo desconhecido:\r\n".__LINE__;
                             var_dump($data->Type);
                             $e++;
                             die;
@@ -79,6 +79,7 @@ class NotificationsProcess {
                 $itens = $this->getComplaintInfo($message);
                 break;
             default:
+                echo "tipo desconhecido:\r\n".__LINE__;
                 print_r($message);
                 die;
                 break;
