@@ -56,7 +56,7 @@
                         <td><a href="{{ path('recipient_show', { 'id': recipient.id }) }}">{{ recipient.id }}</a></td>
                         <td>{{ recipient.email }}</td>
                         <td>{{ recipient.subject }}</td>
-                        <td>{{ recipient.date | date('d/m/Y H:i:s') }}</td>
+                        <td>{{ recipient.date | date('d/m/Y H:i:s', timezone) }}</td>
                         <td>{{ recipient.status }}</td>
                         <td>{{ recipient.subscription }}</td>
                         <td><pre>{{ recipient.info  }}</pre></td>

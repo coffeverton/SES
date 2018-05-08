@@ -10,6 +10,15 @@ use SesBundle\Entity\Recipient;
 
 class DefaultController extends Controller
 {
+    
+    /**
+     * @Route("/")
+     */
+    public function index()
+    {
+        return $this->redirectToRoute('subscription_index');
+    }
+    
     /**
      * recebe uma requisicao e salva na pasta temporaria, para processar depois
      * @Route("/request/{id}", name="request_url")
