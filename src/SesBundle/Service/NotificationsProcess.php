@@ -43,6 +43,7 @@ class NotificationsProcess {
                             break;
                         
                         default:
+                            echo "tipo desconhecido:\r\n";
                             var_dump($data->Type);
                             $e++;
                             die;
