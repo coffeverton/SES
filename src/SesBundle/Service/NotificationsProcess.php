@@ -152,7 +152,6 @@ class NotificationsProcess {
             $obj[$c]['subject'] = $subject;
             $c++;
         }
-        die;
         return $obj;
     }
     
