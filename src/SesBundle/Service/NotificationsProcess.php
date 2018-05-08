@@ -1,6 +1,9 @@
 <?php
 namespace SesBundle\Service;
 
+use SesBundle\Entity\Subscription;
+use SesBundle\Entity\Recipient;
+
 class NotificationsProcess {
     
     private $root_dir;
