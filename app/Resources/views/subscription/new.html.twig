@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Subscription creation</h1>
+    <h2>Criando Tópico</h2>
 
     {{ form_start(form) }}
         {{ form_widget(form) }}
-        <input type="submit" value="Create" />
+        <input type="submit" class="btn btn-primary" value="Criar" />
     {{ form_end(form) }}
 
     <ul>
         <li>
-            <a href="{{ path('subscription_index') }}">Back to the list</a>
+            <a class="btn btn-default" href="{{ path('subscription_index') }}">Voltar</a>
         </li>
     </ul>
 {% endblock %}

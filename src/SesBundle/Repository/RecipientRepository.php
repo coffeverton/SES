@@ -23,30 +23,36 @@ class RecipientRepository extends \Doctrine\ORM\EntityRepository
 	 *
 	 * @return \Doctrine\ORM\Tools\Pagination\Paginator
 	 */
-	public function getRecipients($page= 1, $limit = 5, $search = false)
+	public function getRecipients($page= 1, $limit = 5, $search = false, $filterBySubscription = false)
 	{
-		// Create our query
-		$builder = $this->createQueryBuilder('r')
-		->leftJoin('r.subscriptionId', 'subscription')
-		->orderBy('r.id', 'DESC');
-		
-		//$builder->where('p.ativo = 1');
-		
-		if($search!== false)
-		{
-			
-			$builder
-			->andWhere("r.email LIKE :busca OR r.info LIKE :busca")
-			->setParameter('busca', '%'.$search.'%');
-		}
-		
-		$query = $builder->getQuery();
-		
-		// No need to manually get the result ($query->getResult())
-		
-		$paginator = $this->paginate($query, $page, $limit);
-		
-		return $paginator;
+            // Create our query
+            $builder = $this->createQueryBuilder('r')
+            ->leftJoin('r.subscriptionId', 'subscription')
+            ->orderBy('r.id', 'DESC');
+
+            //$builder->where('p.ativo = 1');
+
+            if($search!== false && strlen($search) >= 3)
+            {
+                $builder
+                    ->andWhere("r.email LIKE :busca OR r.info LIKE :busca OR r.subject LIKE :busca")
+                    ->setParameter('busca', '%'.$search.'%');
+            }
+            
+            if(is_array($filterBySubscription))
+            {
+                $builder
+                    ->andWhere("r.id IN(:subscription_ids)")
+                    ->setParameter('subscription_ids', $filterBySubscription, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY);
+            }
+
+            $query = $builder->getQuery();
+
+            // No need to manually get the result ($query->getResult())
+
+            $paginator = $this->paginate($query, $page, $limit);
+
+            return $paginator;
 	}
 	
 	/**

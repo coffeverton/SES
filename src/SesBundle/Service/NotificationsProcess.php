@@ -30,7 +30,7 @@ class NotificationsProcess {
             if($item->isFile())
             {
                 $data = json_decode(file_get_contents($item->getPathname()));
-                if($data){
+                if(isset($data->local_id)){
                     switch($data->Type)
                     {
                         case 'Notification':
@@ -48,8 +48,8 @@ class NotificationsProcess {
                             die;
                     }
                     $p++;
-                    $this->discard($item);
                 }
+                $this->discard($item);
             }
         }
         return array('p' => $p, 'n' => $n, 'c' => $c, 'e' => $e);
@@ -92,6 +92,7 @@ class NotificationsProcess {
                 $recipient->setEmail($item['email']);
                 $recipient->setDate($item['date']);
                 $recipient->setStatus($item['status']);
+                $recipient->setSubject($item['subject']);
                 if(isset($item['info']))
                 {
                     $recipient->setInfo($item['info']);
@@ -120,6 +121,7 @@ class NotificationsProcess {
             return false;
         }
         $timestamp = new \DateTime($message->bounce->timestamp);
+        $subject   = $this->getSubject($message);
         $c = 0;
         $obj = array();
         foreach($message->bounce->bouncedRecipients as $item)
@@ -128,6 +130,7 @@ class NotificationsProcess {
             $obj[$c]['date']  = $timestamp;
             $obj[$c]['status']= isset($item->status)?$item->status:0;
             $obj[$c]['info']  = isset($item->diagnosticCode)?$item->diagnosticCode:'';
+            $obj[$c]['subject'] = $subject;
             $c++;
         }
         
@@ -138,13 +141,15 @@ class NotificationsProcess {
     {
         $timestamp = new \DateTime($message->delivery->timestamp);
         $status    = substr($message->delivery->smtpResponse, 0, 3);
+        $subject   = $this->getSubject($message);
         $c = 0;
         $obj = array();
         foreach($message->delivery->recipients as $item)
         {
             $obj[$c]['email'] = $item;
             $obj[$c]['date']  = $timestamp;
-            $obj[$c]['status']= $status;
+            $obj[$c]['status'] = $status;
+            $obj[$c]['subject'] = $subject;
             $c++;
         }
         
@@ -154,6 +159,7 @@ class NotificationsProcess {
     private function getComplaintInfo($message)
     {
         $timestamp = new \DateTime($message->complaint->timestamp);
+        $subject   = $this->getSubject($message);
         $c = 0;
         $obj = array();
         foreach($message->complaint->complainedRecipients as $item)
@@ -162,10 +168,23 @@ class NotificationsProcess {
             $obj[$c]['date']  = $timestamp;
             $obj[$c]['status']= '-1';
             $obj[$c]['info']  = 'Complaint';
+            $obj[$c]['subject'] = $subject;
             $c++;
         }
         
         return $obj;
+    }
+    
+    private function getSubject($message)
+    {
+        foreach($message->mail->headers as $header)
+        {
+            if($header->name == 'Subject')
+            {
+                return $header->value;
+            }
+        }
+        return false;
     }
     
     private function discard($file)

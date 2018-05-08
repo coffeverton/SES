@@ -27,8 +27,10 @@ class RecipientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $limit = 20;
-        $search = $request->query->get('search');
-        $recipients = $em->getRepository('SesBundle:Recipient')->getRecipients($page, $limit, $search);
+        $search = trim($request->query->get('search'));
+        $filterBySubscription = $request->query->get('subscriptions');
+        
+        $recipients = $em->getRepository('SesBundle:Recipient')->getRecipients($page, $limit, $search, $filterBySubscription);
         
         // You can also call the count methods (check PHPDoc for `paginate()`)
         # Total fetched (ie: `5` items)
@@ -40,14 +42,18 @@ class RecipientController extends Controller
         
         $maxPages = ceil($total	/ $limit);
         $thisPage = $page;
+        
+        $subscriptions = $em->getRepository('SesBundle:Subscription')->findAll();
 
         return $this->render('recipient/index.html.twig', array(
             'recipients' => $recipients,
-        	'total' => $total,
-        	'maxpages' => $maxPages,
-        	'thispage' => $thisPage,
-        	'totalfetched' => $totalFetched,
-        	'search' => $search,
+            'total' => $total,
+            'maxpages' => $maxPages,
+            'thispage' => $thisPage,
+            'totalfetched' => $totalFetched,
+            'search' => $search,
+            'filterBySubscription' => $filterBySubscription,
+            'subscriptions' => $subscriptions,
         ));
     }
 

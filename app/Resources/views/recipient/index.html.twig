@@ -1,63 +1,81 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Recipients list</h1>
-	<form method="get" action="{{ path('recipient_index_search') }}">
-		<input type="text" name="search" value="{{ search }}" />
-		<button>Search</button>
-	</form>
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Subscription</th>
-                <th>Info</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for recipient in recipients %}
-            <tr>
-                <td><a href="{{ path('recipient_show', { 'id': recipient.id }) }}">{{ recipient.id }}</a></td>
-                <td>{{ recipient.email }}</td>
-                <td>{{ recipient.date | date('Y-m-d H:i:s') }}</td>
-                <td>{{ recipient.status }}</td>
-                <td>{{ recipient.subscription }}</td>
-                <td><pre>{{ recipient.info  }}</pre></td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('recipient_show', { 'id': recipient.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('recipient_delete', { 'id': recipient.id }) }}">delete</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% if maxpages > 1 %}
-    <nav id="pagination">
-        <ul class="pagination pagination-sm">
-            <li {{ thispage == 1 ? 'class="disabled"' }}>
-                <a href="{{ path('recipient_index_pagination', {page: thispage-1 < 1 ? 1 : thispage-1}) }}">«</a>
-            </li>
-
-            {% for i in 1..maxpages %}
-            <li {{ thispage == i ? 'class="active"' }}>
-            <a href="{{ path('recipient_index_pagination', {page: i}) }}">{{ i }}</a>
-            </li>
-            {% endfor %}
-
-            <li {{ thispage == maxpages ? 'class="disabled"' }}>
-                <a href="{{ path('recipient_index_pagination', {page: thispage+1 <= maxpages ? thispage+1 : thispage}) }}">»</a>
-            </li>
-        </ul>
-    </nav>
-    {% endif %}
+    <h2>Relatório de e-mails</h2>
+    <h6>{{ total }} itens encontrados</h6>
+    <div class="row pt-3 px-4">
+        <form method="get" action="{{ path('recipient_index_search') }}">
+            <div class="col-md-12">
+                <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Procurar</label>
+                        <i class="fas fa-info-circle" title="Pesquise pelo e-mail, assunto ou informações"></i>
+                        <input type="text" name="search" class="form-control" value="{{ search }}" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Filtrar por um ou mais tópicos</label>
+                        <ul class="list-group">
+                        {% for subscription in subscriptions %}
+                            <li class="list-group-item">
+                                <input type="checkbox" name="subscriptions[]" id="subscription_{{subscription.id}}" value="{{subscription.id}}" {% if subscription.id in filterBySubscription %} checked {% endif %} />
+                                <label for="subscription_{{subscription.id}}">{{subscription.topic}}</label>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-success">Buscar</button>
+            </div>
+        </form>
+    </div>
+    {% include 'recipient/pagination.html.twig' %}
+    <div class="row pt-3 px-4">
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Email</th>
+                        <th>Assunto</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                        <th>Tópico</th>
+                        <th>Info</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for recipient in recipients %}
+                    <tr>
+                        <td><a href="{{ path('recipient_show', { 'id': recipient.id }) }}">{{ recipient.id }}</a></td>
+                        <td>{{ recipient.email }}</td>
+                        <td>{{ recipient.subject }}</td>
+                        <td>{{ recipient.date | date('d/m/Y H:i:s') }}</td>
+                        <td>{{ recipient.status }}</td>
+                        <td>{{ recipient.subscription }}</td>
+                        <td><pre>{{ recipient.info  }}</pre></td>
+                        <td>
+                            <ul>
+                                <li>
+                                    <a href="{{ path('recipient_show', { 'id': recipient.id }) }}">show</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('recipient_delete', { 'id': recipient.id }) }}">delete</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include 'recipient/pagination.html.twig' %}
+    
 {% endblock %}

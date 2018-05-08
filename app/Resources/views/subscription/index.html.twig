@@ -1,48 +1,50 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Subscriptions list</h1>
+    <h2>Listando Tópicos</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Topico</th>
+                    <th>Verificado</th>
+                    <th>POST URL</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for subscription in subscriptions %}
+                <tr>
+                    <td>
+                        <a href="{{ path('subscription_edit', { 'id': subscription.id }) }}">{{ subscription.id }}</a>
+                    </td>
+                    <td>
+                        <a href="{{ path('subscription_edit', { 'id': subscription.id }) }}">
+                            {{ subscription.topic }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('subscription_edit', { 'id': subscription.id }) }}">
+                            {% if subscription.status %}Sim{% else %}Não{% endif %}
+                        </a>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" readonly onclick="this.select()" value="{{ app.request.getSchemeAndHttpHost ~ path('request_url', {'id':subscription.id}) }}" />
+                    </td>
+                    <td>
+                        <a href="{{ path('subscription_edit', { 'id': subscription.id }) }}">Editar</a>
+                    </td>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Topic</th>
-                <th>Status</th>
-                <th>POST URL</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for subscription in subscriptions %}
-            <tr>
-                <td><a href="{{ path('subscription_show', { 'id': subscription.id }) }}">{{ subscription.id }}</a></td>
-                <td>{{ subscription.topic }}</td>
-                <td>{% if subscription.status %}Yes{% else %}No{% endif %}</td>
-                <td>
-                	<a href="{{ path('request_url', {'id':subscription.id}) }}">
-                		{{ app.request.getSchemeAndHttpHost ~ path('request_url', {'id':subscription.id}) }}
-                	</a>
-                </td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('subscription_show', { 'id': subscription.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('subscription_edit', { 'id': subscription.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-                
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('subscription_new') }}">Create a new subscription</a>
-        </li>
-    </ul>
+    <div class="row">
+        <div class="col-md-4">
+            <a href="{{ path('subscription_new') }}" class="btn btn-primary">Criar novo tópico</a>
+        </div>
+    </div>
 {% endblock %}

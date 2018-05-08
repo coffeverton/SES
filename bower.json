@@ -1,0 +1,12 @@
+{
+    "name": "agencialink",
+    "authors": [
+        "Everton Pereira <suporte@agencialink.com>"
+    ],
+    "private": true,
+    "dependencies": {
+        "bootstrap": "*",
+        "jquery": "*",
+        "components-font-awesome": "*"
+    }
+}

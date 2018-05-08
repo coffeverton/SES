@@ -1,45 +1,63 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Recipient</h1>
+    <h1>E-mail</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ recipient.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ recipient.email }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ recipient.date | date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ recipient.status }}</td>
-            </tr>
-            <tr>
-                <th>Subscription</th>
-                <td>{{ recipient.subscription }}</td>
-            </tr>
-            <tr>
-                <th>Info</th>
-                <td><pre>{{ recipient.info }}</pre></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ recipient.id }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ recipient.email }}</td>
+                </tr>
+                <tr>
+                    <th>Assunto</th>
+                    <td>{{ recipient.subject }}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>{{ recipient.date | date('d/m/Y H:i:s') }}</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>{{ recipient.status }}</td>
+                </tr>
+                <tr>
+                    <th>Tópico</th>
+                    <td>{{ recipient.subscription }}</td>
+                </tr>
+                <tr>
+                    <th>Info</th>
+                    <td><pre>{{ recipient.info }}</pre></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('recipient_index') }}">Back to the list</a>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <a class="btn btn-default" href="{{ path('recipient_index') }}">Voltar</a>
         </li>
-        <li>
+        <li class="list-group-item">
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+                <input type="submit" value="Excluir" class="btn btn-danger" id="btn-excluir">
             {{ form_end(delete_form) }}
         </li>
     </ul>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(function(){
+            $('#btn-excluir').click(function(e){
+               if(!confirm('Deseja realmente excluir este e-mail?'))
+               {
+                   e.preventDefault();
+               }
+            });
+        });
+    </script>
 {% endblock %}

@@ -1,21 +1,33 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Subscription edit</h1>
+    <h2>Editando Tópico</h2>
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
+        <input type="submit" class="btn btn-primary" value="Editar" />
     {{ form_end(edit_form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('subscription_index') }}">Back to the list</a>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <a class="btn btn-default" href="{{ path('subscription_index') }}">Voltar</a>
         </li>
-        <li>
+        <li class="list-group-item">
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+                <input type="submit" value="Excluir" class="btn btn-danger" id="btn-excluir">
             {{ form_end(delete_form) }}
         </li>
     </ul>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(function(){
+            $('#btn-excluir').click(function(e){
+               if(!confirm('Deseja realmente excluir este tópico? Todos os bounces relacionados à ele também serão excluídos.'))
+               {
+                   e.preventDefault();
+               }
+            });
+        });
+    </script>
 {% endblock %}

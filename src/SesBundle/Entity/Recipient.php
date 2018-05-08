@@ -27,6 +27,12 @@ class Recipient
      * @ORM\Column(name="email", type="string", length=255)
      */
     private $email;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="subject", type="string", length=255)
+     */
+    private $subject;
 
     /**
      * @var \DateTime
@@ -89,6 +95,30 @@ class Recipient
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set subject
+     *
+     * @param string $subject
+     *
+     * @return Recipient
+     */
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
+
+        return $this;
+    }
+
+    /**
+     * Get subject
+     *
+     * @return string
+     */
+    public function getSubject()
+    {
+        return $this->subject;
     }
 
     /**
