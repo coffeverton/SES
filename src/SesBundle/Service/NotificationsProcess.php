@@ -78,6 +78,8 @@ class NotificationsProcess {
             case 'Complaint':
                 $itens = $this->getComplaintInfo($message);
                 break;
+            case 'AmazonSnsSubscriptionSucceeded':
+                break;
             default:
                 echo "tipo desconhecido:\r\n".__LINE__;
                 print_r($message);
