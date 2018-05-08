@@ -42,7 +42,7 @@ class RecipientRepository extends \Doctrine\ORM\EntityRepository
             if(is_array($filterBySubscription))
             {
                 $builder
-                    ->andWhere("r.id IN(:subscription_ids)")
+                    ->andWhere("r.subscriptionId IN(:subscription_ids)")
                     ->setParameter('subscription_ids', $filterBySubscription, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY);
             }
 
