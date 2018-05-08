@@ -170,7 +170,7 @@ class NotificationsProcess {
     
     private function discard($file)
     {
-        $folder = $this->root_dir.'/../var/notifications/processed/'.date('y/m/d');
+        $folder = $this->root_dir.'/../var/notifications/processed/'.date('y/m/d/H');
         @mkdir($folder, 0777, true);
         rename(
             $file->getPathname()
